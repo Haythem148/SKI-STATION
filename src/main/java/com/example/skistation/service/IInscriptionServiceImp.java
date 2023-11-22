@@ -3,6 +3,7 @@ package com.example.skistation.service;
 import com.example.skistation.Entity.Course;
 import com.example.skistation.Entity.Inscription;
 import com.example.skistation.Entity.Skieur;
+import com.example.skistation.Entity.TypeAbonnement;
 import com.example.skistation.repository.CourseRep;
 import com.example.skistation.repository.InscriptionRep;
 import com.example.skistation.repository.SkieurRep;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +57,10 @@ public class IInscriptionServiceImp implements IInscriptionService {
 
     @Override
     public Inscription assignRegistrationToCourse(Long numInscription, Long numCourse) {
-        Inscription inscription=inscriptionRep.findById(numInscription).orElse(null);
-        Course course=courseRep.findById(numCourse).orElse(null);
+        Inscription inscription=inscriptionRep.findById(numInscription).orElseThrow(() -> new IllegalArgumentException("No inscription found with this id: " + numInscription));;
+        Course course=courseRep.findById(numCourse).orElseThrow(() -> new IllegalArgumentException("No course found with this id: " + numCourse));;
             inscription.setCourses(course);
         return inscription;
     }
+
 }

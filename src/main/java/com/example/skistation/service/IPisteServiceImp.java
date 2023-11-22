@@ -35,7 +35,7 @@ public class IPisteServiceImp implements IPisteService{
 
     @Override
     public Piste getId(long id) {
-        return pisteRep.findById(id).orElseThrow(() -> new IllegalArgumentException("No Course found with this id"+id));
+        return pisteRep.findById(id).orElseThrow(() -> new IllegalArgumentException("No piste found with this id"+id));
     }
 
     @Override

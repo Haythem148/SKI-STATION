@@ -6,6 +6,7 @@ import com.example.skistation.repository.CourseRep;
 import com.example.skistation.repository.InscriptionRep;
 import com.example.skistation.repository.MoniteurRep;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class IMoniteurServiceImp implements IMoniteurService {
 
     private final MoniteurRep moniteurrep;
@@ -48,7 +50,7 @@ public class IMoniteurServiceImp implements IMoniteurService {
 
     @Override
     public Moniteur addInstructorAndAssignToCourse(Moniteur moniteur, Long numCourse) {
-        Course course = courseRep.findById(numCourse).orElse(null);
+        Course course = courseRep.findById(numCourse).orElseThrow(() -> new IllegalArgumentException("No course found with this id: " + numCourse));;
         Set<Course> courses = new HashSet<>();
         courses.add(course);
         moniteur.setCourses(courses);

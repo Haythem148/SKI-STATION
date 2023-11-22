@@ -4,7 +4,6 @@ import com.example.skistation.Entity.*;
 import com.example.skistation.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +20,6 @@ public class ISkieurServiceImp implements ISkieurService {
     private final InscriptionRep inscriptionRep;
 
 
-
-
-
     public List<Skieur> getAllSkieurs() {
         return (List<Skieur>) skieurRep.findAll();
     }
@@ -32,12 +28,12 @@ public class ISkieurServiceImp implements ISkieurService {
         return skieurRep.findById(id).orElse(null);
     }
 
-    public Skieur addSkieur(Skieur skieur,Abonnement abonnement) {
+    public Skieur addSkieur(Skieur skieur, Abonnement abonnement) {
 
         abonnementRep.save(abonnement);
         skieur.setAbonnement(abonnement);
 
-       return skieurRep.save(skieur);
+        return skieurRep.save(skieur);
 
 
     }
@@ -52,13 +48,13 @@ public class ISkieurServiceImp implements ISkieurService {
     }
 
     public Skieur getId(long id) {
-        return skieurRep.findById(id).orElse(null);
+        return skieurRep.findById(id).orElseThrow(() -> new IllegalArgumentException("No skieur found with this id: " + id));
     }
 
     @Override
     public Skieur assignSkierToPiste(Long numSkieur, Long numPiste) {
-        Skieur skieur=skieurRep.findById(numSkieur).orElse(null);
-        Piste piste=pisteRep.findById(numPiste).orElse(null);
+        Skieur skieur = skieurRep.findById(numSkieur).orElseThrow(() -> new IllegalArgumentException("No skieur found with this id: " + numSkieur));;
+        Piste piste = pisteRep.findById(numPiste).orElseThrow(() -> new IllegalArgumentException("No piste found with this id: " + numPiste));;
         if (skieur != null && piste != null) {
             Set<Piste> pisteSet = skieur.getPistes();
             pisteSet.add(piste);
@@ -72,20 +68,23 @@ public class ISkieurServiceImp implements ISkieurService {
     public Boolean deleteById(long id) {
         return null;
     }
+
     @Override
     public Skieur addSkierAndAssignToCourse(Skieur skier, Long numCourse) {
         //1er étape recupération des objets
         //2éme étape traitements
         //3éme validation des objets null
         //save
-        Course course=courseRep.findById(numCourse).orElse(null);
-        Inscription inscription=skier.getInscriptions().stream().findFirst().get();
+        Course course = courseRep.findById(numCourse).orElseThrow(() -> new IllegalArgumentException("No course found with this id: " + numCourse));
+        Inscription inscription = skier.getInscriptions().stream().findFirst().get();
         inscription.setSkieur(skier);
         inscription.setCourses(course);
         skieurRep.save(skier);
         inscriptionRep.save(inscription);
         return skier;
     }
-
+    public List<Skieur> retrieveSkiersBySubscriptionType(TypeAbonnement typeAbonnement) {
+        return (List<Skieur>) skieurRep.findByAbonnementTypeAbonnement(typeAbonnement);
+}
 
 }

@@ -2,6 +2,7 @@ package com.example.skistation.service;
 
 import com.example.skistation.Entity.Abonnement;
 import com.example.skistation.Entity.Skieur;
+import com.example.skistation.Entity.TypeAbonnement;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface ISkieurService {
 
     Boolean deleteById(long id); // Changed 'Piste' to 'Skieur'
     public Skieur addSkierAndAssignToCourse(Skieur skier, Long numCourse);
+    List<Skieur> retrieveSkiersBySubscriptionType(TypeAbonnement typeAbonnement);
+
 
 }
